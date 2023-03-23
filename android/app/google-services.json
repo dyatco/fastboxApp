@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "55427095463",
+    "project_id": "fastboxappauth",
+    "storage_bucket": "fastboxappauth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55427095463:android:d38367b164ae60b02cf482",
+        "android_client_info": {
+          "package_name": "com.example.fastbox_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55427095463-v5gia8ckf8okhuffnmnjjvi3rqa080q9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjGurJBQ2OZ6aVPLU2CbsXXpZHm4Q8Ylo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55427095463-v5gia8ckf8okhuffnmnjjvi3rqa080q9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
