@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 16,
                   ),
                 ),
-                
+
                 const SizedBox(height: 25),
 
                 // email textfield

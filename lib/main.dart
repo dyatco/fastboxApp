@@ -1,4 +1,5 @@
 import 'package:fastbox_app/pages/auth_page.dart';
+import 'package:fastbox_app/pages/intro_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
