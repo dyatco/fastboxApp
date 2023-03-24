@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fastbox_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,12 +18,23 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   // text editing controllers
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    super.dispose();
+  }
 
   // sign user up method
-  void signUserUp() async {
+  Future signUserUp() async {
     // show loading circle
     showDialog(
       context: context,
@@ -35,14 +47,24 @@ class _RegisterPageState extends State<RegisterPage> {
     // try sign up
     try {
       // passwords match
-      if (passwordController.text == confirmPasswordController.text) {
-        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
+      if (_passwordController.text == _confirmPasswordController.text) {
+        // create user
+        final credential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
         );
+
+        // add user details
+        addUserDetails(
+          _firstNameController.text.trim(),
+          _lastNameController.text.trim(),
+          _emailController.text.trim(),
+        );
+
         // pop loading circle after sign up
         Navigator.pop(context);
-      // show error message passwords don't match
+        // show error message passwords don't match
       } else {
         // pop loading circle if error
         Navigator.pop(context);
@@ -50,10 +72,20 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     } on FirebaseAuthException catch (e) {
       // pop loading circle if error
-        Navigator.pop(context);
+      Navigator.pop(context);
       // show error message
       showErrorMessage(e.code);
     }
+  }
+
+  Future addUserDetails(String firstName, String lastName, String email) async {
+    await FirebaseFirestore.instance.collection('users').add(
+      {
+        'first name': firstName,
+        'last name': lastName,
+        'email': email,
+      },
+    );
   }
 
   // error message popup
@@ -88,15 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 const SizedBox(height: 50),
 
-                // logo
-                const Icon(
-                  Icons.lock,
-                  size: 50,
-                ),
-
-                const SizedBox(height: 50),
-
-                // welcome back, you've been missed!
+                // Header
                 Text(
                   'Let\'s create and account for you',
                   style: TextStyle(
@@ -107,9 +131,27 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 25),
 
+                // first name textfield
+                MyTextField(
+                  controller: _firstNameController,
+                  hintText: 'First Name',
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
+
+                // last name textfield
+                MyTextField(
+                  controller: _lastNameController,
+                  hintText: 'Last Name',
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
+
                 // email textfield
                 MyTextField(
-                  controller: emailController,
+                  controller: _emailController,
                   hintText: 'Email',
                   obscureText: false,
                 ),
@@ -118,7 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // password textfield
                 MyTextField(
-                  controller: passwordController,
+                  controller: _passwordController,
                   hintText: 'Password',
                   obscureText: true,
                 ),
@@ -127,7 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // confirm password textfield
                 MyTextField(
-                  controller: confirmPasswordController,
+                  controller: _confirmPasswordController,
                   hintText: 'Confirm password',
                   obscureText: true,
                 ),
@@ -177,8 +219,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SquareTile(
-                      onTap: () => AuthService().signInWithGoogle(),
-                      imagePath: 'lib/images/google.png'),
+                        onTap: () => AuthService().signInWithGoogle(),
+                        imagePath: 'lib/images/google.png'),
                   ],
                 ),
 
